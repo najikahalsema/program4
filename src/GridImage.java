@@ -1,4 +1,4 @@
-/* This class draws the 10x10 grid. It also handles the animation and
+/* This class draws the 10x10 grid and the image. It also handles the animation and
  * movement of the grid's points.
  */
 import java.awt.*;
@@ -10,7 +10,7 @@ import javax.swing.event.*;
 import java.util.ArrayList;
 import java.lang.Math;
 
-public class Grid extends JPanel {
+public class GridImage extends JPanel {
     private GridPoint[][] points;   //i = x, j = y
     private ArrayList<Edge> edges;
     private boolean isDragging = false;
@@ -19,12 +19,22 @@ public class Grid extends JPanel {
     private int count = 1;
     Timer timer;
 
+    public BufferedImage bim = null;
+    // marking for intensity shift
+    public BufferedImage filteredbim = null;
+    private boolean showfiltered = false;
+
     // base constructor
-    public Grid() {
+    public GridImage(String file) {
         super();
+
+        BufferedImage img = readImage(file);
 
         this.setSize(new Dimension(300,300));
         points = new GridPoint[10][10];
+        bim = img;
+        filteredbim = new BufferedImage(
+                bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         //Create 10x10 grid of points. i = rows, j = columns
         for (int i = 0; i < 300; i += 30) {
@@ -33,17 +43,25 @@ public class Grid extends JPanel {
                 points[i / 30][j / 30] = point;
             }
         }
-        //image = new ImgView(readImage("3.jpg"));
+        filteredbim = resize(filteredbim);
+        bim = resize(bim);
+        setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
+
         ConnectPoints();
         repaint();
         revalidate();
     }
 
     // constructor
-    public Grid(MouseListener listener, MouseMotionListener motion) {
+    public GridImage(MouseListener listener, MouseMotionListener motion, String file) {
         super();
         this.setSize(new Dimension(300,300));
 
+        BufferedImage img = readImage(file);
+
+        bim = img;
+        filteredbim = new BufferedImage(
+                bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_ARGB);
         points = new GridPoint[10][10];
 
         //Create 10x10 grid of points. i = rows, j = columns
@@ -53,10 +71,12 @@ public class Grid extends JPanel {
                 points[i / 30][j / 30] = point;
             }
         }
-        //image = new ImgView(readImage("3.jpg"));
+        filteredbim = resize(filteredbim);
+        bim = resize(bim);
+        setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
 
         ConnectPoints();
-        repaint();
+        this.repaint();
         revalidate();
 
         this.addMouseListener(listener);
@@ -161,7 +181,7 @@ public class Grid extends JPanel {
     }
 
     // controls the animation of the graph and its points
-    public void Morph(Grid start, Grid end, int fps, int seconds) {
+    public void Morph(GridImage start, GridImage end, int fps, int seconds) {
         ActionListener event = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -204,6 +224,15 @@ public class Grid extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D big = (Graphics2D) g;
+        // draw the image behind the grid
+        if (showfiltered) {
+            big.drawImage(filteredbim, 0, 0, this);
+        }
+        else {
+            big.drawImage(bim, 0, 0, this);
+        }
+        // draw the grid
         for (int i = 0; i < points.length; i++) {
             for (int j = 0; j < points[i].length; j++) {
                 g.setColor(points[i][j].GetColor());
@@ -216,7 +245,71 @@ public class Grid extends JPanel {
                        edges.get(i).GetPoint2().GetX(), edges.get(i).GetPoint2().GetY());
         }
     }
-    /*public BufferedImage readImage(String file) {
+    // change the image by resetting what's stored
+    public void setImage(BufferedImage img) {
+        if (img == null) {
+            return;
+        }
+        bim = img;
+        filteredbim = new BufferedImage(
+                bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        filteredbim = resize(filteredbim);
+        bim = resize(bim);
+        setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
+
+        showfiltered = false;
+        this.repaint();
+    }
+    // get the stored image
+    public BufferedImage getImage() {
+        return bim;
+    }
+
+    public void showImage() {
+        if (bim == null) {
+            return;
+        }
+        showfiltered = false;
+        this.repaint();
+    }
+
+    public boolean isShowfiltered() {
+        return showfiltered;
+    }
+    // resizing the image so that it is the same size as the grid
+    public BufferedImage resize(BufferedImage img) {
+        Image temp = img.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+        BufferedImage rimg = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g = rimg.createGraphics();
+        g.drawImage(temp, 0, 0, null);
+        g.dispose();
+
+        return rimg;
+    }
+    // brightens the image according to user specifications
+    // currently deletes the image when the slider is used... but why?
+    // using the threshold function for now as a placeholder
+    public void brighten(int value) {
+        if (bim == null) return;
+        int i;
+        byte thresh[] = new byte[256];
+        if ((value < 0) || (value > 100))
+            value = 128;
+        for (i = 0; i < value; i++)
+            thresh[i] = 0;
+        for (int j = i; j < 255; j++)
+            thresh[j] = (byte)255;
+        ByteLookupTable blut = new ByteLookupTable (0, thresh);
+        // RescaleOp rop = new RescaleOp(float, 0, null);
+        // rop.filter(newbim, filteredbim);
+        LookupOp lop = new LookupOp (blut, null);
+        lop.filter (bim, filteredbim);
+        showfiltered=true;
+        this.repaint();
+    }
+    public BufferedImage readImage(String file) {
         MediaTracker tracker = new MediaTracker(new Component() {});
         Image image = Toolkit.getDefaultToolkit().getImage(file);
         tracker.addImage(image, 0);
@@ -232,13 +325,13 @@ public class Grid extends JPanel {
         return bim;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         JFrame frame = new JFrame("Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 500);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.LINE_AXIS));
-        Grid grid1 = new Grid();
-        Grid grid2 = new Grid();
+        GridTest grid1 = new GridTest("3.jpg");
+        GridTest grid2 = new GridTest("3.jpg");
         frame.getContentPane().add(grid1);
         frame.getContentPane().add(grid2);
         //frame.pack();

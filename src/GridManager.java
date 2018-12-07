@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 public class GridManager {
-    public Grid grid1;
-    public Grid grid2;
+    public GridImage grid1;
+    public GridImage grid2;
     public MouseListener listen1;
     public MouseMotionListener motion1;
     public MouseListener listen2;
     public MouseMotionListener motion2;
+    public String file1;
+    public String file2;
     private GridPoint point = null;
 
     public GridManager() {
@@ -150,7 +152,7 @@ public class GridManager {
             @Override
             public void mouseMoved(MouseEvent e) {}
         };
-        grid1 = new Grid(listen1, motion1);
-        grid2 = new Grid(listen2, motion2);
+        grid1 = new GridImage(listen1, motion1, "3.jpg");
+        grid2 = new GridImage(listen2, motion2, "3.jpg");
     }
 }

@@ -11,9 +11,7 @@ import java.util.ArrayList;
 
 public class UIView extends JFrame {
     private BufferedImage leftImage;
-    private ImgView leftView;
     private BufferedImage rightImage;
-    private ImgView rightView;
     GridManager manage = new GridManager();
 
     JFrame frame = new JFrame("JMorph");
@@ -59,8 +57,8 @@ public class UIView extends JFrame {
                             try {
                                 leftImage = ImageIO.read(file);
                             } catch(IOException e1) {};
-                            leftView.setImage(leftImage);
-                            leftView.showImage();
+                            manage.grid1.setImage(leftImage);
+                            manage.grid1.showImage();
                         }
                     }
                 }
@@ -77,8 +75,8 @@ public class UIView extends JFrame {
                         } catch (IOException e1) {
                         }
                         ;
-                        rightView.setImage(rightImage);
-                        rightView.showImage();
+                        manage.grid2.setImage(rightImage);
+                        manage.grid2.showImage();
                     }
                 }
             }
@@ -99,8 +97,8 @@ public class UIView extends JFrame {
 
     // builds the main display
     private void buildDisplay() {
-        leftView = new ImgView(readImage("3.jpg"));
-        rightView = new ImgView(readImage("3.jpg"));
+        //leftView = new ImgView(readImage("3.jpg"));
+        //rightView = new ImgView(readImage("3.jpg"));
 
         preview = new JButton("Preview");
         reset = new JButton("Reset");
@@ -129,7 +127,7 @@ public class UIView extends JFrame {
         filterSliderL.addChangeListener(
                 new ChangeListener() {
                     public void stateChanged(ChangeEvent e) {
-                        leftView.brighten(filterSliderL.getValue());
+                        manage.grid1.brighten(filterSliderL.getValue());
                         filterLabelL.setText("Brightness Level: " +
                         Integer.toString(filterSliderL.getValue()));
                     }
@@ -144,7 +142,7 @@ public class UIView extends JFrame {
         filterSliderR.addChangeListener(
                 new ChangeListener() {
                     public void stateChanged(ChangeEvent e) {
-                        rightView.brighten(filterSliderR.getValue());
+                        manage.grid2.brighten(filterSliderR.getValue());
                         filterLabelR.setText("Brightness Level: " +
                                 Integer.toString(filterSliderR.getValue()));
                     }
@@ -154,7 +152,7 @@ public class UIView extends JFrame {
         preview.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Grid preview_grid = new Grid();
+                GridImage preview_grid = new GridImage("3.jpg");
                 JFrame popup = new JFrame("Preview");
                 //JOptionPane.showMessageDialog(null, preview_gr, "Preview", JOptionPane.OK_CANCEL_OPTION);
                 popup.setSize(400,400);
@@ -167,7 +165,7 @@ public class UIView extends JFrame {
         });
 
         // setting up image panel
-        JPanel imgPanel = new JPanel();
+        /*JPanel imgPanel = new JPanel();
         JPanel imgs = new JPanel();
         JPanel sliderPanel = new JPanel();
         JPanel labelPanel = new JPanel();
@@ -184,7 +182,7 @@ public class UIView extends JFrame {
         imgPanel.add(imgs);
         imgPanel.add(sliderPanel);
         imgPanel.add(labelPanel);
-
+        */
         frame.setSize(1500,500);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.LINE_AXIS));
 
@@ -194,7 +192,7 @@ public class UIView extends JFrame {
         frame.getContentPane().add(FpsSlider);
         frame.getContentPane().add(Box.createRigidArea(new Dimension(5,0)));
         frame.getContentPane().add(manage.grid1);
-        frame.getContentPane().add(imgPanel);
+        //frame.getContentPane().add(imgPanel);
         frame.getContentPane().add(Box.createRigidArea(new Dimension(5,0)));
         frame.getContentPane().add(manage.grid2);
         frame.getContentPane().add(preview);

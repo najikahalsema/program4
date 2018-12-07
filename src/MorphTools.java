@@ -74,7 +74,7 @@ public class MorphTools{
 
 // set up an alpha value for compositing as an example
         AlphaComposite ac =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)0.5);
+                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)1);
         g2.setComposite(ac);
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
