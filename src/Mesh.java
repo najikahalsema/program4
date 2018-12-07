@@ -29,7 +29,7 @@ public class Mesh extends JFrame implements ActionListener {
 
         // new canvas
         mymesh = new MeshCanvas();
-        mymesh.setImage("boat.gif");
+        mymesh.setImage("3.jpg");
         c.add(mymesh, BorderLayout.CENTER);
 
         // add control buttons

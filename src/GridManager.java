@@ -1,19 +1,27 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.imageio.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.lang.Math;
 
 public class GridManager {
-    private Grid grid1;
-    private Grid grid2;
-    private JPanel panel;
-    private MouseListener listen1;
-    private MouseMotionListener motion1;
-    private MouseListener listen2;
-    private MouseMotionListener motion2;
+    public Grid grid1;
+    public Grid grid2;
+    public MouseListener listen1;
+    public MouseMotionListener motion1;
+    public MouseListener listen2;
+    public MouseMotionListener motion2;
+
     private GridPoint point = null;
+    private JPanel panel;
+    public ImgView leftView;
+    public BufferedImage leftImage;
+    public ImgView rightView;
+    public BufferedImage rightImage;
 
     public GridManager() {
         listen1 = new MouseListener() {
@@ -156,8 +164,64 @@ public class GridManager {
         JFrame frame = new JFrame("JMorph");
         GridManager manage = new GridManager();
 
-        // The following creates the slider to adjust the FPS
+        final JFileChooser fc = new JFileChooser(".");
+        JMenuBar bar = new JMenuBar();
+        frame.setJMenuBar(bar);
 
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem openLeft = new JMenuItem("Open Left Image");
+        JMenuItem openRight = new JMenuItem("Open Right Image");
+        JMenuItem fileExit = new JMenuItem("Exit");
+
+        // action listener to change the left image
+        // not implementable yet
+        /* openLeft.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        int returnVal = fc.showOpenDialog(GridManager.this);
+
+                        if (returnVal == JFileChooser.APPROVE_OPTION) {
+                            File file = fc.getSelectedFile();
+                            try {
+                                leftImage = ImageIO.read(file);
+                            } catch(IOException e1) {};
+                            leftView.setImage(leftImage);
+                            leftView.showImage();
+                        }
+                    }
+                }
+        );
+        openRight.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int returnVal = fc.showOpenDialog(GridManager.this);
+
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        File file = fc.getSelectedFile();
+                        try {
+                            rightImage = ImageIO.read(file);
+                        } catch (IOException e1) {
+                        }
+                        ;
+                        rightView.setImage(rightImage);
+                        rightView.showImage();
+                    }
+                }
+            }
+        );*/
+        fileExit.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        System.exit(0);
+                    }
+                }
+        );
+
+        fileMenu.add(openLeft);
+        fileMenu.add(openRight);
+        fileMenu.add(fileExit);
+        bar.add(fileMenu);
+        // The following creates the slider to adjust the FPS
         JLabel FpsLabel = new JLabel("Frames per second: 30");
         JSlider FpsSlider = new JSlider(SwingConstants.VERTICAL, 1, 60, 30);
 

@@ -1,6 +1,4 @@
 // Mesh and Warp Canvas
-
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -10,7 +8,7 @@ import java.awt.image.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import com.sun.image.codec.jpeg.*;
+import javax.imageio.*;
 
 
 public class MeshCanvas extends Canvas
@@ -45,8 +43,6 @@ public class MeshCanvas extends Canvas
         showwarp=false;
         drawMesh();
     }
-
-
 
     public void mouseClicked(MouseEvent mevt) {
     }
