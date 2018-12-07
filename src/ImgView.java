@@ -6,7 +6,7 @@ import javax.swing.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ImgView extends JLabel {
+public class ImgView extends JPanel {
     public BufferedImage bim = null;
     // marking for intensity shift
     public BufferedImage filteredbim = null;
@@ -19,7 +19,7 @@ public class ImgView extends JLabel {
     public ImgView(BufferedImage img) {
         bim = img;
         filteredbim = new BufferedImage(
-                bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_RGB);
+                bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_ARGB);
         // might need to change this later to 300x300 to match the Grid dimensions
         filteredbim = resize(filteredbim);
         bim = resize(bim);
@@ -34,7 +34,8 @@ public class ImgView extends JLabel {
         }
         bim = img;
         filteredbim = new BufferedImage(
-                bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_RGB);
+                bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
         filteredbim = resize(filteredbim);
         bim = resize(bim);
         setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
@@ -82,8 +83,24 @@ public class ImgView extends JLabel {
     }
 
     // brightens the image according to user specifications
-    public void brightenImage() {
+    // currently deletes the image when the slider is used... but why?
+    // using the threshold function for now as a placeholder
+    public void brighten(int value) {
         if (bim == null) return;
-
+        int i;
+        byte thresh[] = new byte[256];
+        if ((value < 0) || (value > 100))
+            value = 128;
+        for (i = 0; i < value; i++)
+            thresh[i] = 0;
+        for (int j = i; j < 255; j++)
+            thresh[j] = (byte)255;
+        ByteLookupTable blut = new ByteLookupTable (0, thresh);
+        // RescaleOp rop = new RescaleOp(float, 0, null);
+        // rop.filter(newbim, filteredbim);
+        LookupOp lop = new LookupOp (blut, null);
+        lop.filter (bim, filteredbim);
+        showfiltered=true;
+        this.repaint();
     }
 }

@@ -18,6 +18,7 @@ public class Grid extends JPanel {
     private boolean lock_selection = false;
     private int count = 1;
     Timer timer;
+    public ImgView image;
 
     // base constructor
     public Grid() {
@@ -33,6 +34,7 @@ public class Grid extends JPanel {
                 points[i / 30][j / 30] = point;
             }
         }
+        //image = new ImgView(readImage("3.jpg"));
         ConnectPoints();
         repaint();
         revalidate();
@@ -52,6 +54,8 @@ public class Grid extends JPanel {
                 points[i / 30][j / 30] = point;
             }
         }
+        //image = new ImgView(readImage("3.jpg"));
+
         ConnectPoints();
         repaint();
         revalidate();
@@ -213,12 +217,26 @@ public class Grid extends JPanel {
                        edges.get(i).GetPoint2().GetX(), edges.get(i).GetPoint2().GetY());
         }
     }
+    /*public BufferedImage readImage(String file) {
+        MediaTracker tracker = new MediaTracker(new Component() {});
+        Image image = Toolkit.getDefaultToolkit().getImage(file);
+        tracker.addImage(image, 0);
+        try {
+            tracker.waitForID(0);
+        } catch(InterruptedException e) {}
 
-    /*
+        BufferedImage bim = new BufferedImage(
+                image.getWidth(this), image.getHeight(this), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D big = bim.createGraphics();
+        big.drawImage(image, 0, 0, this);
+
+        return bim;
+    }
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800,500);
+        frame.setSize(800, 500);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.LINE_AXIS));
         Grid grid1 = new Grid();
         Grid grid2 = new Grid();
@@ -226,6 +244,5 @@ public class Grid extends JPanel {
         frame.getContentPane().add(grid2);
         //frame.pack();
         frame.setVisible(true);
-    }
-    */
+    }*/
 }

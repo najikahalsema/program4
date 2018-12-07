@@ -110,7 +110,7 @@ public class MeshCanvas extends Canvas
         catch (InterruptedException e) {}
         BufferedImage bim = new BufferedImage
                 (image.getWidth(this), image.getHeight(this),
-                        BufferedImage.TYPE_INT_RGB);
+                        BufferedImage.TYPE_INT_ARGB);
         Graphics2D big = bim.createGraphics();
         big.drawImage (image, 0, 0, this);
         return bim;
@@ -127,7 +127,7 @@ public class MeshCanvas extends Canvas
         if (bimwarp == null)
             bimwarp = new BufferedImage (bim.getWidth(this),
                     bim.getHeight(this),
-                    BufferedImage.TYPE_INT_RGB);
+                    BufferedImage.TYPE_INT_ARGB);
 
 
         S = new Triangle (0, 0, xsize/2, ysize/2, xsize, 0);

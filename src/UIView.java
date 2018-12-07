@@ -19,6 +19,11 @@ public class UIView extends JFrame {
     JFrame frame = new JFrame("JMorph");
     private JLabel FpsLabel;
     private JSlider FpsSlider;
+    private JLabel filterLabelL;
+    private JSlider filterSliderL;
+    private JLabel filterLabelR;
+    private JSlider filterSliderR;
+
     private JButton preview;
     private JButton reset;
 
@@ -101,8 +106,8 @@ public class UIView extends JFrame {
         reset = new JButton("Reset");
 
         // build the FPS slider
-        JLabel FpsLabel = new JLabel("Frames per second: 30");
-        JSlider FpsSlider = new JSlider(SwingConstants.VERTICAL, 1, 60, 30);
+        FpsLabel = new JLabel("Frames per second: 30");
+        FpsSlider = new JSlider(SwingConstants.VERTICAL, 1, 60, 30);
 
         FpsSlider.setMajorTickSpacing(5);
         FpsSlider.setPaintTicks(true);
@@ -114,7 +119,37 @@ public class UIView extends JFrame {
                     }
                 }
         );
+        // build the Filter Sliders
+        // Left image slider
+        filterLabelL = new JLabel("Brightness Level: --");
+        filterSliderL = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
 
+        filterSliderL.setMajorTickSpacing(10);
+        filterSliderL.setPaintTicks(true);
+        filterSliderL.addChangeListener(
+                new ChangeListener() {
+                    public void stateChanged(ChangeEvent e) {
+                        leftView.brighten(filterSliderL.getValue());
+                        filterLabelL.setText("Brightness Level: " +
+                        Integer.toString(filterSliderL.getValue()));
+                    }
+                }
+        );
+        // right image slider
+        filterLabelR = new JLabel("Brightness Level: --");
+        filterSliderR = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
+
+        filterSliderR.setMajorTickSpacing(10);
+        filterSliderR.setPaintTicks(true);
+        filterSliderR.addChangeListener(
+                new ChangeListener() {
+                    public void stateChanged(ChangeEvent e) {
+                        rightView.brighten(filterSliderR.getValue());
+                        filterLabelR.setText("Brightness Level: " +
+                                Integer.toString(filterSliderR.getValue()));
+                    }
+                }
+        );
         // shows the animation in a new popup window
         preview.addActionListener(new ActionListener() {
             @Override
@@ -130,10 +165,25 @@ public class UIView extends JFrame {
                 preview_grid.Morph(manage.grid1, manage.grid2, FpsSlider.getValue(), 1);
             }
         });
-        JPanel imgPanel = new JPanel();
 
-        imgPanel.add(leftView);
-        imgPanel.add(rightView);
+        // setting up image panel
+        JPanel imgPanel = new JPanel();
+        JPanel imgs = new JPanel();
+        JPanel sliderPanel = new JPanel();
+        JPanel labelPanel = new JPanel();
+
+        imgPanel.setLayout(new BoxLayout(imgPanel, BoxLayout.PAGE_AXIS));
+
+        imgs.add(leftView);
+        imgs.add(rightView);
+        sliderPanel.add(filterSliderL);
+        sliderPanel.add(filterSliderR);
+        labelPanel.add(filterLabelL);
+        labelPanel.add(filterLabelR);
+
+        imgPanel.add(imgs);
+        imgPanel.add(sliderPanel);
+        imgPanel.add(labelPanel);
 
         frame.setSize(1500,500);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.LINE_AXIS));
@@ -166,7 +216,7 @@ public class UIView extends JFrame {
         } catch(InterruptedException e) {}
 
         BufferedImage bim = new BufferedImage(
-                image.getWidth(this), image.getHeight(this), BufferedImage.TYPE_INT_RGB);
+                image.getWidth(this), image.getHeight(this), BufferedImage.TYPE_INT_ARGB);
         Graphics2D big = bim.createGraphics();
         big.drawImage(image, 0, 0, this);
 
