@@ -76,7 +76,7 @@ public class GridManager {
                         point = grid1.GetClickedPoint(e);
                         grid1.SetLock(true);
                     }
-                    if (point != null) {
+                    if (point != null && point.IsOnEdge() == false) {
                         point.SetXY(e.getX(), e.getY());
                         grid1.Redraw();
                     }
@@ -143,7 +143,7 @@ public class GridManager {
                         point = grid2.GetClickedPoint(e);
                         grid2.SetLock(true);
                     }
-                    if (point != null) {
+                    if (point != null && point.IsOnEdge() == false) {
                         point.SetXY(e.getX(), e.getY());
                         grid2.Redraw();
                     }
@@ -152,7 +152,7 @@ public class GridManager {
             @Override
             public void mouseMoved(MouseEvent e) {}
         };
-        grid1 = new GridImage(listen1, motion1, "3.jpg");
-        grid2 = new GridImage(listen2, motion2, "3.jpg");
+        grid1 = new GridImage(listen1, motion1, "/home/firstlane/CS335/Program4/ship.jpg");
+        grid2 = new GridImage(listen2, motion2, "/home/firstlane/CS335/Program4/ship.jpg");
     }
 }

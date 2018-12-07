@@ -40,6 +40,10 @@ public class GridImage extends JPanel {
         for (int i = 0; i < 300; i += 30) {
             for (int j = 0; j < 300; j+= 30) {
                 GridPoint point = new GridPoint(i, j, i / 30, j / 30);
+                if (point.GetRow() == 0 || point.GetRow() == 9 ||
+                        point.GetColumn() == 0 || point.GetColumn() == 9) {
+                    point.SetOnEdge(true);
+                }
                 points[i / 30][j / 30] = point;
             }
         }
@@ -68,6 +72,10 @@ public class GridImage extends JPanel {
         for (int i = 0; i < 300; i += 30) {
             for (int j = 0; j < 300; j += 30) {
                 GridPoint point = new GridPoint(i, j, i / 30, j / 30);
+                if (point.GetRow() == 0 || point.GetRow() == 9 ||
+                        point.GetColumn() == 0 || point.GetColumn() == 9) {
+                    point.SetOnEdge(true);
+                }
                 points[i / 30][j / 30] = point;
             }
         }
@@ -187,7 +195,7 @@ public class GridImage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println(count);
 
-                if (count != (fps*seconds) - 1) {
+                if (count != (fps*seconds)) {
                     for (int i = 0; i < start.points.length; i++) {
                         for (int j = 0; j < start.points[i].length; j++) {
                             float dx = end.points[i][j].GetX() - start.points[i][j].GetX();
@@ -235,8 +243,10 @@ public class GridImage extends JPanel {
         // draw the grid
         for (int i = 0; i < points.length; i++) {
             for (int j = 0; j < points[i].length; j++) {
-                g.setColor(points[i][j].GetColor());
-                g.fillOval(points[i][j].GetX() - 5, points[i][j].GetY() - 5, 10, 10);
+                if (points[i][j].IsOnEdge() == false) {
+                    g.setColor(points[i][j].GetColor());
+                    g.fillOval(points[i][j].GetX() - 5, points[i][j].GetY() - 5, 10, 10);
+                }
             }
         }
 

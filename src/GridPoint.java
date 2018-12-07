@@ -12,6 +12,7 @@ public class GridPoint {
     private int row;
     private int column;
     private Color color = Color.BLACK;
+    private boolean onedge = false;
 
     // Constructor
     public GridPoint(int x, int y, int row, int column) {
@@ -51,5 +52,13 @@ public class GridPoint {
     }
     public int GetColumn() {
         return column;
+    }
+
+    public void SetOnEdge(boolean value) {
+        onedge = value;
+    }
+
+    public boolean IsOnEdge() {
+        return onedge;
     }
 }
