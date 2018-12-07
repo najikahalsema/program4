@@ -29,23 +29,23 @@ public class GridImage extends JPanel {
         super();
 
         BufferedImage img = readImage(file);
-
-        this.setSize(new Dimension(300,300));
-        points = new GridPoint[10][10];
         bim = img;
         filteredbim = new BufferedImage(
                 bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
+        //this.setSize(new Dimension(bim.getWidth(), bim.getHeight()));
+        points = new GridPoint[10][10];
+
         //Create 10x10 grid of points. i = rows, j = columns
-        for (int i = 0; i < 300; i += 30) {
-            for (int j = 0; j < 300; j+= 30) {
-                GridPoint point = new GridPoint(i, j, i / 30, j / 30);
-                points[i / 30][j / 30] = point;
+        for (int i = 0; i < 500; i += 50) {
+            for (int j = 0; j < 500; j+= 50) {
+                GridPoint point = new GridPoint(i, j, i / 50, j / 50);
+                points[i / 50][j / 50] = point;
             }
         }
         filteredbim = resize(filteredbim);
         bim = resize(bim);
-        setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
+        this.setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
 
         ConnectPoints();
         repaint();
@@ -55,25 +55,25 @@ public class GridImage extends JPanel {
     // constructor
     public GridImage(MouseListener listener, MouseMotionListener motion, String file) {
         super();
-        this.setSize(new Dimension(300,300));
 
         BufferedImage img = readImage(file);
-
         bim = img;
         filteredbim = new BufferedImage(
                 bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        //this.setSize(new Dimension(bim.getWidth(), bim.getHeight()));
         points = new GridPoint[10][10];
 
         //Create 10x10 grid of points. i = rows, j = columns
-        for (int i = 0; i < 300; i += 30) {
-            for (int j = 0; j < 300; j += 30) {
-                GridPoint point = new GridPoint(i, j, i / 30, j / 30);
-                points[i / 30][j / 30] = point;
+        for (int i = 0; i < 500; i += 50) {
+            for (int j = 0; j < 500; j += 50) {
+                GridPoint point = new GridPoint(i, j, i / 50, j / 50);
+                points[i / 50][j / 50] = point;
             }
         }
         filteredbim = resize(filteredbim);
         bim = resize(bim);
-        setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
+        this.setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
 
         ConnectPoints();
         this.repaint();
@@ -279,8 +279,8 @@ public class GridImage extends JPanel {
     }
     // resizing the image so that it is the same size as the grid
     public BufferedImage resize(BufferedImage img) {
-        Image temp = img.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-        BufferedImage rimg = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB);
+        Image temp = img.getScaledInstance(450, 450, Image.SCALE_SMOOTH);
+        BufferedImage rimg = new BufferedImage(450, 450, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g = rimg.createGraphics();
         g.drawImage(temp, 0, 0, null);

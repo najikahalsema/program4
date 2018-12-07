@@ -97,9 +97,6 @@ public class UIView extends JFrame {
 
     // builds the main display
     private void buildDisplay() {
-        //leftView = new ImgView(readImage("3.jpg"));
-        //rightView = new ImgView(readImage("3.jpg"));
-
         preview = new JButton("Preview");
         reset = new JButton("Reset");
 
@@ -155,7 +152,7 @@ public class UIView extends JFrame {
                 GridImage preview_grid = new GridImage("3.jpg");
                 JFrame popup = new JFrame("Preview");
                 //JOptionPane.showMessageDialog(null, preview_gr, "Preview", JOptionPane.OK_CANCEL_OPTION);
-                popup.setSize(400,400);
+                popup.setSize(500,500);
                 popup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 popup.add(preview_grid);
                 popup.setVisible(true);
@@ -172,17 +169,17 @@ public class UIView extends JFrame {
 
         imgPanel.setLayout(new BoxLayout(imgPanel, BoxLayout.PAGE_AXIS));
 
-        imgs.add(leftView);
-        imgs.add(rightView);
+        //imgs.add(manage.grid1);
+        //imgs.add(manage.grid2);
         sliderPanel.add(filterSliderL);
         sliderPanel.add(filterSliderR);
         labelPanel.add(filterLabelL);
         labelPanel.add(filterLabelR);
 
-        imgPanel.add(imgs);
+        //imgPanel.add(imgs);
         imgPanel.add(sliderPanel);
         imgPanel.add(labelPanel);
-        */
+*/
         frame.setSize(1500,500);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.LINE_AXIS));
 
@@ -193,7 +190,7 @@ public class UIView extends JFrame {
         frame.getContentPane().add(Box.createRigidArea(new Dimension(5,0)));
         frame.getContentPane().add(manage.grid1);
         //frame.getContentPane().add(imgPanel);
-        frame.getContentPane().add(Box.createRigidArea(new Dimension(5,0)));
+        //frame.getContentPane().add(Box.createRigidArea(new Dimension(5,0)));
         frame.getContentPane().add(manage.grid2);
         frame.getContentPane().add(preview);
         frame.getContentPane().add(reset);
@@ -201,24 +198,6 @@ public class UIView extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
-    }
-
-    // reads an Image object from a file and returns a converted
-    // BufferedImage object
-    public BufferedImage readImage(String file) {
-        MediaTracker tracker = new MediaTracker(new Component() {});
-        Image image = Toolkit.getDefaultToolkit().getImage(file);
-        tracker.addImage(image, 0);
-        try {
-            tracker.waitForID(0);
-        } catch(InterruptedException e) {}
-
-        BufferedImage bim = new BufferedImage(
-                image.getWidth(this), image.getHeight(this), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D big = bim.createGraphics();
-        big.drawImage(image, 0, 0, this);
-
-        return bim;
     }
 
     public static void main(String[] argv) {
