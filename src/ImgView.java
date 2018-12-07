@@ -21,8 +21,10 @@ public class ImgView extends JLabel {
         filteredbim = new BufferedImage(
                 bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_RGB);
         // might need to change this later to 300x300 to match the Grid dimensions
-        // setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
-        setPreferredSize(new Dimension(300, 300));
+        filteredbim = resize(filteredbim);
+        bim = resize(bim);
+        setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
+
         this.repaint();
     }
     // change the image by resetting what's stored
@@ -33,7 +35,10 @@ public class ImgView extends JLabel {
         bim = img;
         filteredbim = new BufferedImage(
                 bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_RGB);
-        setPreferredSize(new Dimension(300, 300));
+        filteredbim = resize(filteredbim);
+        bim = resize(bim);
+        setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
+
         showfiltered = false;
         this.repaint();
     }
@@ -41,23 +46,7 @@ public class ImgView extends JLabel {
     public BufferedImage getImage() {
         return bim;
     }
-    /* preview the transformation of the image from Left to Right
-    public void PreviewLR() {
-        if (bim == null) {
-            return;
-        }
-        // create the temporary JFrame to preview the transformation
-        JFrame frame = new JFrame("Preview");
-        frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
-        JPanel preview = new JPanel();
-        preview.add(this);
-        //showfiltered = false;
 
-        frame.add(preview);
-        frame.pack();
-        frame.setLocationByPlatform(true);
-        frame.setVisible(true);
-    }*/
     public void showImage() {
         if (bim == null) {
             return;
@@ -78,5 +67,23 @@ public class ImgView extends JLabel {
         else {
             big.drawImage(bim, 0, 0, this);
         }
+    }
+
+    // resizing the image so that it is the same size as the grid
+    public BufferedImage resize(BufferedImage img) {
+        Image temp = img.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+        BufferedImage rimg = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g = rimg.createGraphics();
+        g.drawImage(temp, 0, 0, null);
+        g.dispose();
+
+        return rimg;
+    }
+
+    // brightens the image according to user specifications
+    public void brightenImage() {
+        if (bim == null) return;
+
     }
 }

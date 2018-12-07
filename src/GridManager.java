@@ -15,13 +15,7 @@ public class GridManager {
     public MouseMotionListener motion1;
     public MouseListener listen2;
     public MouseMotionListener motion2;
-
     private GridPoint point = null;
-    private JPanel panel;
-    public ImgView leftView;
-    public BufferedImage leftImage;
-    public ImgView rightView;
-    public BufferedImage rightImage;
 
     public GridManager() {
         listen1 = new MouseListener() {
@@ -156,126 +150,7 @@ public class GridManager {
             @Override
             public void mouseMoved(MouseEvent e) {}
         };
-        panel = new JPanel();
         grid1 = new Grid(listen1, motion1);
         grid2 = new Grid(listen2, motion2);
-    }
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("JMorph");
-        GridManager manage = new GridManager();
-
-        final JFileChooser fc = new JFileChooser(".");
-        JMenuBar bar = new JMenuBar();
-        frame.setJMenuBar(bar);
-
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem openLeft = new JMenuItem("Open Left Image");
-        JMenuItem openRight = new JMenuItem("Open Right Image");
-        JMenuItem fileExit = new JMenuItem("Exit");
-
-        // action listener to change the left image
-        // not implementable yet
-        /* openLeft.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        int returnVal = fc.showOpenDialog(GridManager.this);
-
-                        if (returnVal == JFileChooser.APPROVE_OPTION) {
-                            File file = fc.getSelectedFile();
-                            try {
-                                leftImage = ImageIO.read(file);
-                            } catch(IOException e1) {};
-                            leftView.setImage(leftImage);
-                            leftView.showImage();
-                        }
-                    }
-                }
-        );
-        openRight.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    int returnVal = fc.showOpenDialog(GridManager.this);
-
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        File file = fc.getSelectedFile();
-                        try {
-                            rightImage = ImageIO.read(file);
-                        } catch (IOException e1) {
-                        }
-                        ;
-                        rightView.setImage(rightImage);
-                        rightView.showImage();
-                    }
-                }
-            }
-        );*/
-        fileExit.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        System.exit(0);
-                    }
-                }
-        );
-
-        fileMenu.add(openLeft);
-        fileMenu.add(openRight);
-        fileMenu.add(fileExit);
-        bar.add(fileMenu);
-        // The following creates the slider to adjust the FPS
-        JLabel FpsLabel = new JLabel("Frames per second: 30");
-        JSlider FpsSlider = new JSlider(SwingConstants.VERTICAL, 1, 60, 30);
-
-        FpsSlider.setMajorTickSpacing(5);
-        FpsSlider.setPaintTicks(true);
-        FpsSlider.addChangeListener(
-                new ChangeListener() {
-                    public void stateChanged(ChangeEvent e) {
-                        FpsLabel.setText("Frames per Second: " +
-                                Integer.toString(FpsSlider.getValue()));
-                    }
-                }
-        );
-
-        JButton preview = new JButton("Preview");
-        JButton reset = new JButton("Reset");
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1500,500);
-        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.LINE_AXIS));
-
-        // adding elements to the JFrame
-        frame.getContentPane().add(FpsLabel);
-        frame.getContentPane().add(Box.createRigidArea(new Dimension(10,0)));
-        frame.getContentPane().add(FpsSlider);
-        frame.getContentPane().add(Box.createRigidArea(new Dimension(5,0)));
-        frame.getContentPane().add(manage.grid1);
-        frame.getContentPane().add(Box.createRigidArea(new Dimension(5,0)));
-        frame.getContentPane().add(manage.grid2);
-        frame.getContentPane().add(preview);
-        frame.getContentPane().add(reset);
-        frame.setVisible(true);
-
-        // shows the animation in a new popup window
-        preview.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Grid preview_grid = new Grid();
-                JFrame popup = new JFrame("Preview");
-                //JOptionPane.showMessageDialog(null, preview_gr, "Preview", JOptionPane.OK_CANCEL_OPTION);
-                popup.setSize(400,400);
-                popup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                popup.add(preview_grid);
-                popup.setVisible(true);
-
-                preview_grid.Morph(manage.grid1, manage.grid2, FpsSlider.getValue(), 1);
-            }
-        });
-        // resets the right grid
-        reset.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e) {
-               manage.grid2 = new Grid();
-               //manage.grid2 = new Grid();
-            }
-        });
     }
 }
